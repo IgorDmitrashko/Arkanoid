@@ -10,17 +10,25 @@ public class Ball : MonoBehaviour
     private float[] _directionCount = { -1f, -.5f, .5f, 1f };
     private float _speed = 5;
 
+   [SerializeField] private ControlClickMouse clickMouse;
+    private bool isBallMoving;
+
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody>();
+        if(clickMouse != null) clickMouse.MouseClickEvent += BallMoving;
     }
 
-    void Start() {
+    void Start() {      
         _direction.x = _directionCount[Random.Range(0, _directionCount.Length)];
         _direction.z = 1;
     }
 
+    private void BallMoving() {
+        isBallMoving = true;
+    }
+
     void Update() {
-        Shoot();
+        if(isBallMoving) Move();
     }
 
     public void BounceX() {
@@ -46,7 +54,7 @@ public class Ball : MonoBehaviour
 
     }
 
-    private void Shoot() {
+    private void Move() {
         _rigidbody.velocity = _direction.normalized * _speed;
     }
 
